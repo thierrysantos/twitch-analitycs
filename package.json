@@ -1,0 +1,31 @@
+{
+  "name": "twitch-analitycs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev src/twitch-client.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thierrysantos/twitch-analitycs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thierrysantos/twitch-analitycs/issues"
+  },
+  "homepage": "https://github.com/thierrysantos/twitch-analitycs#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.29",
+    "@types/socket.io-client": "^1.4.35",
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.1.5"
+  },
+  "dependencies": {
+    "ioredis": "^4.22.0",
+    "socket.io": "^3.1.1",
+    "socket.io-client": "^3.1.1"
+  }
+}
