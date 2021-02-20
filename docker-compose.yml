@@ -8,4 +8,20 @@ services:
       MONGO_INITDB_DATABASE: twitch
       MONGO_INITDB_ROOT_PASSWORD: dev
     ports:
-      - 27017:27017
+      - "27017:27017"
+
+  worker:
+    build: .
+    restart: always
+    command: yarn dev
+    environment:
+      TOKEN: ${TOKEN}
+      USERNAME: ${USERNAME}
+      MONGOURI: ${MONGOURI}
+    volumes:
+      - .:/home/node/app/
+      - /home/node/app/node_modules
+    depends_on:
+      - mongo
+    links:
+      - mongo

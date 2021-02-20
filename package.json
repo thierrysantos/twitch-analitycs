@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "ts-node-dev src/index.ts",
+    "start": "node dist/index.js",
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files"
   },
   "repository": {
     "type": "git",
@@ -18,18 +20,24 @@
   },
   "homepage": "https://github.com/thierrysantos/twitch-analitycs#readme",
   "devDependencies": {
-    "@types/node": "^14.14.29",
-    "@types/socket.io-client": "^1.4.35",
-    "dotenv": "^8.2.0",
-    "ts-node-dev": "^1.1.1",
-    "typescript": "^4.1.5"
+    "@babel/cli": "7.12.17",
+    "@babel/core": "7.12.17",
+    "@babel/node": "7.12.17",
+    "@babel/plugin-transform-typescript": "7.12.17",
+    "@babel/preset-env": "7.12.17",
+    "@babel/preset-typescript": "7.12.17",
+    "@types/node": "14.14.29",
+    "@types/pino": "6.3.6",
+    "@types/socket.io-client": "1.4.35",
+    "babel-plugin-transform-typescript-metadata": "0.3.1",
+    "dotenv": "8.2.0",
+    "ts-node-dev": "1.1.1",
+    "typescript": "4.1.5"
   },
   "dependencies": {
-    "date-fns": "^2.17.0",
-    "ioredis": "^4.22.0",
-    "mongoose": "^5.11.17",
-    "socket.io": "^3.1.1",
-    "socket.io-client": "^3.1.1",
-    "twitch-js": "^2.0.0-beta.42"
+    "date-fns": "2.17.0",
+    "mongoose": "5.11.17",
+    "pino": "6.11.1",
+    "twitch-js": "2.0.0-beta.42"
   }
 }

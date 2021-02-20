@@ -1,4 +1,7 @@
 import TwitchJs from 'twitch-js'
+import createLogger from './logger'
+
+const logger = createLogger('twitch-client')
 
 type CreateConnectionRequest = {
   token: string
@@ -14,7 +17,9 @@ export const createConnection = async ({ token, username }: CreateConnectionRequ
     }
   })
 
+  logger.info('connect to twitch')
   await client.chat.connect()
+  logger.info('connect to twitch successful')
 
   return client
 }

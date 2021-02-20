@@ -1,51 +1,50 @@
 import 'dotenv/config'
 import { createConnection as createTwitchConnection } from './twitch-connection'
-import { createConnection as createDatabaseConnection } from './database-connection'
-import { UserStateTags } from 'twitch-js'
-import { format } from 'date-fns'
-
-let cache = {}
+import { createConnection as createDatabaseConnection } from './database/connection'
+import { multiChannelProcessing } from './multi-channel-processing'
+import createLogger from './logger'
 
 const {
   TOKEN,
   USERNAME
 } = process.env
 
+const logger = createLogger('application')
+
+process.on("uncaughtException", (error) => {
+  logger.fatal("uncaughtException", {
+    name: "UNCAUGHT_EXCEPTION",
+    stack: error.stack,
+    message: error.message,
+  });
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  throw reason;
+});
+
 export const start = async () => {
   const token = TOKEN || ''
   const username = USERNAME || ''
 
-  const [{ chat }] = await Promise.all([
+  const [{ chat }, database] = await Promise.all([
     createTwitchConnection({ token, username }),
     createDatabaseConnection()
   ])
 
-  await chat.join('#gaules')
-
-  chat.on('PRIVMSG', ({ tags, channel, timestamp }) => {
-    const userState = tags as UserStateTags
-    const today = format(timestamp, 'yyyy-MM-dd')
-
-    const key = `${channel}:${userState.username}:${today}`
-
-    const payload = {
-      channel,
-      username: userState.username,
-      date: today,
-      bits: Number(userState.badges.bits) || 0,
-      isSub: !!Number(userState.subscriber),
-      isPrime: Boolean(userState.badges.premium),
-      isMod: userState.isModerator,
-      isVip: Boolean(userState.badges.vip),
-    }
-
-    cache = {
-      ...cache,
-      [key]: payload
-    }
-
-    console.log(cache)
+  await multiChannelProcessing({
+    chat,
+    channels: ['#gaules', '#ale_apoka', '#ziGueira', '#baiano', '#riotgamesbrazil']
   })
+
+  process.on("SIGTERM", async () => {
+    logger.info("SIGTERM signal received");
+    await database.disconnect();
+    process.exit(0);
+  });
 }
 
-start()
+(async () => {
+  await start()
+})()
