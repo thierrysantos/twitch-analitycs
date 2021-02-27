@@ -12,6 +12,7 @@ services:
 
   worker:
     build: .
+    command: yarn worker
     restart: always
     command: yarn dev
     environment:
